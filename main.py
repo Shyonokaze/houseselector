@@ -67,7 +67,7 @@ def districtcheck():
         tk.Radiobutton(top, text = street, variable = select2, value = street,command = streetcheck).grid(row = 5,column = k)
         k +=1
         
-def deleter(check):
+def deleter():
     if select2.get() in Beijing[select1.get()].keys():
         if select3.get() in Beijing[select1.get()][select2.get()].keys():
             if select4.get() in Beijing[select1.get()][select2.get()][select3.get()].keys():
