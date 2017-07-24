@@ -1,6 +1,9 @@
 def findbest(dic):
     return dic['东城区']['a']['g']['h']['j']
 
+def lastcheck():
+    choose.config(text='选择：%s-%s-%s-%s-%s'%(select1.get(),select2.get(),select3.get(),select4.get(),select5.get()))
+
 def layercheck():
     
     for j in range(1,100):
@@ -12,11 +15,12 @@ def layercheck():
     k=1    
     for house in Beijing[select1.get()][select2.get()][select3.get()][select4.get()].keys():
         if Beijing[select1.get()][select2.get()][select3.get()][select4.get()][house]:
-            tk.Radiobutton(top, text = house, variable = select5, value = house,command =layercheck).grid(row = 8,column = k)
+            tk.Radiobutton(top, text = house, variable = select5, value = house,command =lastcheck).grid(row = 8,column = k)
         else:
-            tk.Radiobutton(top, text = house, variable = select5, value = house,command =layercheck,fg = 'red').grid(row = 8,column = k)
+            tk.Radiobutton(top, text = house, variable = select5, value = house,command =lastcheck,fg = 'red').grid(row = 8,column = k)
         k +=1
-        
+    choose.config(text='选择：%s-%s-%s-%s'%(select1.get(),select2.get(),select3.get(),select4.get()))
+    
 def unitcheck():
     
     for i in range(7,9):
@@ -29,7 +33,8 @@ def unitcheck():
     for layer in Beijing[select1.get()][select2.get()][select3.get()].keys():
         tk.Radiobutton(top, text = layer, variable = select4, value = layer,command =layercheck).grid(row = 7,column = k)
         k +=1
-        
+    choose.config(text='选择：%s-%s-%s'%(select1.get(),select2.get(),select3.get()))
+    
 def buildingcheck():
     
     for i in range(6,9):
@@ -42,6 +47,7 @@ def buildingcheck():
     for unit in Beijing[select1.get()][select2.get()].keys():
         tk.Radiobutton(top, text = unit, variable = select3, value = unit,command = unitcheck).grid(row = 6,column = k)
         k +=1
+    choose.config(text='选择：%s-%s'%(select1.get(),select2.get()))
         
 def districtcheck():
     for i in range(5,9):
@@ -55,6 +61,7 @@ def districtcheck():
     for building in Beijing[select1.get()].keys():
         tk.Radiobutton(top, text = building, variable = select2, value = building,command = buildingcheck).grid(row = 5,column = k)
         k +=1
+    choose.config(text='选择：%s'%select1.get())
         
 def deleter():
     if select2.get() in Beijing[select1.get()].keys():
@@ -77,7 +84,7 @@ def deleter():
                             tk.Radiobutton(top, text = house, variable = select5, value = house,command =layercheck,fg = 'red').grid(row = 8,column = k)
                         k +=1
                     best = findbest(Beijing) 
-                    besthouse.config(text = best)
+                    besthouse.config(text = '最佳房源：%s'%best)
        
 
         
@@ -102,7 +109,7 @@ def recover():
                             tk.Radiobutton(top, text = house, variable = select5, value = house,command =layercheck,fg = 'red').grid(row = 8,column = k)
                         k +=1
                     best = findbest(Beijing) 
-                    besthouse.config(text = best)
+                    besthouse.config(text = '最佳房源：%s'%best)
 
 import tkinter as tk 
 
@@ -110,10 +117,9 @@ Beijing={'东城区':{'a':{'g':{'h':{'j':True,'k':True}}},'b':{'l':{'m':{'o':Tru
 top = tk.Tk()
 top.title("House Selector")
 
-tk.Label(top, text = '最佳房源：',height = 3,font=("Arial", 15)).grid(row = 0,column = 999)
 best = findbest(Beijing) 
-besthouse = tk.Label(top, text = best,height = 3,font=("Arial", 15))
-besthouse.grid(row = 0,column = 1000)
+besthouse = tk.Label(top, text = '最佳房源：%s'%best,height = 1,font=("Arial", 15))
+besthouse.grid(row = 0,column = 990)
 
 
 site = ["城区","楼号","单元","层数","户号"]
@@ -131,7 +137,9 @@ for district in Beijing.keys():
     tk.Radiobutton(top, text = district, variable = select1, value = district, command = districtcheck).grid(row = 4,column = cl)
     cl +=1
 
-tk.Button(top, text = "标记删除", command = deleter).grid(row = 0,column = 997)
-tk.Button(top, text = "标记恢复", command = recover).grid(row = 0,column = 998)
+tk.Button(top, text = "标记删除", command = deleter).grid(row = 999,column = 889)
+choose = tk.Label(top, text = '选择：',font=("Arial", 15))
+choose.grid(row = 998,column = 990)
+tk.Button(top, text = "标记恢复", command = recover).grid(row = 999,column = 998)
 
 top.mainloop()
