@@ -111,6 +111,7 @@ for choice in Beijing.keys():
     Beijing_lb.insert(tk.END,choice)
 color()
 
+Beijing_lb.bind('<Return>',deleter)
 Beijing_lb.bind('<Double-Button-1>',deleter)
 
 tk.Button(top, text = "打印已选",font=("华文彩云", 15),command = printnew).grid(row = 0,column = 999)
