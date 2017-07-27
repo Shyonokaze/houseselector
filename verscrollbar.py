@@ -17,6 +17,10 @@ def deleter(event):
     Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]=(Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]-1)**2
     color()
     Beijing_best.config(text='最佳房源：%s'%findbest())
+    if Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]:
+        last_recover.config(text='上一个恢复的房源：%s'%Beijing_lb.get(Beijing_lb.curselection()))
+    else:
+        last_delete.config(text='上一个删除的房源：%s'%Beijing_lb.get(Beijing_lb.curselection()))
     
 
 def findbest():
@@ -31,8 +35,7 @@ def findbest():
 def save():
     check_print=tk.messagebox.askokcancel(title='确定', message='确定要保存文件么？')
     if check_print:
-        fid3=open('data_new.txt','wt')
-        
+        fid3=open('data_new.txt','wt')        
         for choice in Beijing.keys():
             print(choice,file=fid3,end=' ')
             if Beijing[choice][0]:
@@ -48,13 +51,18 @@ def save():
 def reset():
     import os
     import shutil
-    check_reset=tk.messagebox.askokcancel(title='确定', message='确定要重置文件么？')
+    check_reset=tk.messagebox.askokcancel(title='注意！', message='您将失去所有记录，确定要重置文件么？')
     if check_reset:
-        os.remove('data_new.txt')
+        try:
+            os.remove('data_new.txt')
+        except:
+            pass
         shutil.copy('data.txt','data_new.txt')
-    for choice in Beijing.keys():
-        Beijing[choice][0]=1
-    color()
+        for choice in Beijing.keys():
+            Beijing[choice][0]=1
+        color()
+        last_delete.config(text='上一个删除的房源：无')
+        last_recover.config(text='上一个恢复的房源：无')
         
         
         
@@ -120,6 +128,10 @@ Beijing_lb = tk.Listbox(top,font=('微软雅黑',15),height = 20)
 Beijing_sl = tk.Scrollbar(top,command=Beijing_lb.yview)
 Beijing_best = tk.Label(top,text='最佳房源：%s'%findbest(),font=('微软雅黑',15))
 Beijing_best.grid(row = 0,column = 0,columnspan=2)
+last_delete = tk.Label(top,text='上一个删除的房源：无',font=('微软雅黑',10))
+last_delete.grid(row = 3,column = 0,columnspan=2,sticky='W')
+last_recover = tk.Label(top,text='上一个恢复的房源：无',font=('微软雅黑',10))
+last_recover.grid(row = 4,column = 0,columnspan=2,sticky='W')
 Beijing_lb.config(yscrollcommand = Beijing_sl.set)
 Beijing_lb.grid(row = 1,column = 0,rowspan=2,sticky='NSE')
 Beijing_sl.grid(row = 1,column = 1,rowspan=2,sticky='NSW')
@@ -130,10 +142,10 @@ color()
 Beijing_lb.bind('<Return>',deleter)
 Beijing_lb.bind('<Double-Button-1>',deleter)
 
-tk.Button(top, text = "打印已选",font=("华文彩云", 15),command = printnew).grid(row = 0,column = 999)
+tk.Button(top, text = "打印已选",font=("华文彩云", 15),command = printnew).grid(row = 1,column = 999,sticky='S')
 
-tk.Button(top, text = "保存",font=("华文彩云", 15),command = save).grid(row = 1,column = 999,sticky='S')
-tk.Button(top, text = "重置",font=("华文彩云", 15),command = reset).grid(row = 2,column = 999,sticky='S')
+tk.Button(top, text = "保存",font=("华文彩云", 15),command = save).grid(row = 0,column = 999)
+tk.Button(top, text = "重置",font=("华文彩云", 15),command = reset).grid(row = 3,column = 999,rowspan=2)
         
     
 top.mainloop()
