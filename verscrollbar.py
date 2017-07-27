@@ -63,6 +63,7 @@ def reset():
         color()
         last_delete.config(text='上一个删除的房源：无')
         last_recover.config(text='上一个恢复的房源：无')
+        Beijing_best.config(text='最佳房源：%s'%findbest())
         
         
         
