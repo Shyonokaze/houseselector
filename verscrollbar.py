@@ -32,6 +32,7 @@ def save():
     check_print=tk.messagebox.askokcancel(title='确定', message='确定要保存文件么？')
     if check_print:
         fid3=open('data_new.txt','wt')
+        
         for choice in Beijing.keys():
             print(choice,file=fid3,end=' ')
             if Beijing[choice][0]:
@@ -43,6 +44,20 @@ def save():
             else:
                 print('',file=fid3)
         fid3.close()
+        
+def reset():
+    import os
+    import shutil
+    check_reset=tk.messagebox.askokcancel(title='确定', message='确定要重置文件么？')
+    if check_reset:
+        os.remove('data_new.txt')
+        shutil.copy('data.txt','data_new.txt')
+    for choice in Beijing.keys():
+        Beijing[choice][0]=1
+    color()
+        
+        
+        
                 
 def printnew():
     check_print=tk.messagebox.askokcancel(title='确定', message='确定要打印已被选的房源并保存么？')
@@ -68,6 +83,7 @@ def printnew():
         
             
 import tkinter as tk
+from tkinter import messagebox
 fid = open('data_new.txt','rt')
 line = fid.readline()
 Beijing = {}
@@ -105,8 +121,8 @@ Beijing_sl = tk.Scrollbar(top,command=Beijing_lb.yview)
 Beijing_best = tk.Label(top,text='最佳房源：%s'%findbest(),font=('微软雅黑',15))
 Beijing_best.grid(row = 0,column = 0,columnspan=2)
 Beijing_lb.config(yscrollcommand = Beijing_sl.set)
-Beijing_lb.grid(row = 1,column = 0,sticky='NSE')
-Beijing_sl.grid(row = 1,column = 1,sticky='NSW')
+Beijing_lb.grid(row = 1,column = 0,rowspan=2,sticky='NSE')
+Beijing_sl.grid(row = 1,column = 1,rowspan=2,sticky='NSW')
 for choice in Beijing.keys():
     Beijing_lb.insert(tk.END,choice)
 color()
@@ -117,6 +133,7 @@ Beijing_lb.bind('<Double-Button-1>',deleter)
 tk.Button(top, text = "打印已选",font=("华文彩云", 15),command = printnew).grid(row = 0,column = 999)
 
 tk.Button(top, text = "保存",font=("华文彩云", 15),command = save).grid(row = 1,column = 999,sticky='S')
+tk.Button(top, text = "重置",font=("华文彩云", 15),command = reset).grid(row = 2,column = 999,sticky='S')
         
     
 top.mainloop()
