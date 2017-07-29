@@ -17,11 +17,31 @@ def deleter(event):
     Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]=(Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]-1)**2
     color()
     Beijing_best.config(text='最佳房源：%s'%findbest())
+    
+    fid4=open('记录.txt','a')
+    
     if Beijing[Beijing_lb.get(Beijing_lb.curselection())][0]:
         mem_lb.insert(tk.END,'恢复房源%s'% Beijing_lb.get(Beijing_lb.curselection()))
+        print('恢复房源%s\t\t此时最佳房源:%s'%(Beijing_lb.get(Beijing_lb.curselection()),findbest()),file=fid4)
     else:
         mem_lb.insert(tk.END,'删除房源%s'%Beijing_lb.get(Beijing_lb.curselection()))
+        print('删除房源%s\t\t此时最佳房源:%s'%(Beijing_lb.get(Beijing_lb.curselection()),findbest()),file=fid4)
+    fid4.close()
     mem_lb.yview(tk.END)
+    
+    
+    fid3=open('data_new.txt','wt')        
+    for choice in Beijing.keys():
+        print(choice,file=fid3,end=' ')
+        if Beijing[choice][0]:
+            print('True',file=fid3,end=' ')
+        else:
+            print('False',file=fid3,end=' ')
+        if Beijing[choice][1]:
+            print('new',file=fid3)
+        else:
+            print('',file=fid3)
+    fid3.close()
 
 def findbest():
     bestchoice='无'
@@ -31,27 +51,11 @@ def findbest():
                 bestchoice=Beijing_order[i]
                 break
     return bestchoice
-
-def save():
-    check_print=tk.messagebox.askokcancel(title='确定', message='确定要保存文件么？')
-    if check_print:
-        fid3=open('data_new.txt','wt')        
-        for choice in Beijing.keys():
-            print(choice,file=fid3,end=' ')
-            if Beijing[choice][0]:
-                print('True',file=fid3,end=' ')
-            else:
-                print('False',file=fid3,end=' ')
-            if Beijing[choice][1]:
-                print('new',file=fid3)
-            else:
-                print('',file=fid3)
-        fid3.close()
         
 def reset():
     import os
     import shutil
-    check_reset=tk.messagebox.askokcancel(title='注意！', message='您将失去所有记录，确定要重置文件么？')
+    check_reset=tk.messagebox.askokcancel(title='！！！！！！！！注意！！！！！！！！', message='您将失去所有记录，确定要重置文件么？')
     if check_reset:
         try:
             os.remove('data_new.txt')
@@ -64,7 +68,9 @@ def reset():
 
         Beijing_best.config(text='最佳房源：%s'%findbest())
         mem_lb.delete(0,tk.END)
-        
+        fid4=open('记录.txt','a')
+        print('重置\t\t\t\t\t此时最佳房源是:%s'%findbest(),file=fid4)
+        fid4.close()
         
         
         
@@ -89,6 +95,10 @@ def printnew():
         for choice in Beijing.keys():
             if not Beijing[choice][0]:
                 print(choice,file=fid4)    
+        fid4.close()
+        
+        fid4=open('记录.txt','a')
+        print('打印已选房源',file=fid4)
         fid4.close()
         
             
@@ -146,8 +156,6 @@ Beijing_lb.bind('<Double-Button-1>',deleter)
 
 tk.Button(top, text = "打印已选",font=("华文彩云", 15),command = printnew).grid(row = 1,column = 999,sticky='S')
 
-tk.Button(top, text = "保存",font=("华文彩云", 15),command = save).grid(row = 2,column = 999)
 tk.Button(top, text = "重置",font=("华文彩云", 15),command = reset).grid(row = 0,column = 999)
         
-    
 top.mainloop()
